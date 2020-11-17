@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../../PlantillaPrincipal/PlantillaPrincipal.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+ 
+    <ui:define name="content">
+        <h:form id="tsform">            
+        <p:panel header="INSERCION DE DATOS DE PRESENTACIÓN">
+            <p:panelGrid columns="2" style="width: 100%">
+                <h:outputLabel for="presentacion" value="PRESENTACIÓN"/>
+                <p:inputText id="presentacion" value="#{pb.presentacion.presentacion}" required="true" placeholder="presentación" />
+                
+                <h:outputLabel for="descripcion" value="DESCRIPCION"/>
+                <p:inputText id="descripcion" value="#{pb.presentacion.descripcionPresentacion}" required="true" placeholder="descripción" />
+                
+                <f:facet name="footer">
+                     <p:commandButton id="guardar" value="Guardar Datos" icon="ui-icon-check" style="margin: 0"
+                                      action="#{pb.insertarPresentacion()}" update="@form">
+                     </p:commandButton>
+                     <p:commandButton id="cancelar" value="Cancelar" icon="ui-icon-circle-close" style="margin: 0"
+                                      action="NuevaPresentacion.xhtml?faces-redirect=true"
+                                      process="@this"></p:commandButton>
+                     <p:commandButton id="regresar" value="Regresar" icon="ui-icon-circle-close" style="margin: 0"
+                                      action="TablaPresentaciones.xhtml?faces-redirect=true"
+                                      process="@this"></p:commandButton>
+                </f:facet>
+            </p:panelGrid>
+        </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

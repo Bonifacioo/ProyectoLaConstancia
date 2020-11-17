@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../../PlantillaPrincipal/PlantillaPrincipal.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="frmCapEmp" enctype="multipart/form-data">          
+            <p:panel header="INSERCIÓN DE DATOS DE PRODUCTO">
+                <p:panelGrid columns="2" style="width: 100%">
+                    <h:outputLabel for="marca" value="MARCA"/>
+                    <p:selectOneMenu id="marca"  style="width: 160px" value="#{prob.marca.idMarca}">
+                        <f:selectItem itemLabel="Seleccione una marca" itemValue="0"/>
+                        <f:selectItems value="#{prob.lstMarcas}" var="m" itemLabel="#{m.descripcion}" itemValue="#{m.idMarca}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel for="presentacion" value="PRESENTACIÓN"/>
+                    <p:selectOneMenu id="presentacion"  style="width: 160px" value="#{prob.presentacion.idPresentacion}">
+                        <f:selectItem itemLabel="Seleccione una presentación" itemValue="0"/>
+                        <f:selectItems value="#{prob.lstPresentaciones}" var="p" itemLabel="#{p.descripcionPresentacion}" itemValue="#{p.idPresentacion}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel  for="precio" value="Precio Unitario"/>
+                    <p:spinner id="precio" value="#{prob.producto.precio}" 
+                               prefix="$" min="0" max="100"  stepFactor="0.05"  required="true"/>
+                    
+                    <h:outputLabel for="alcoholica" value="ALCOHOLICA"/>
+                    <p:selectOneMenu id="alcoholica"  style="width: 160px" value="#{prob.producto.alcoholica}">
+                        <f:selectItem itemLabel="Seleccione si es alcoholica o no" itemValue="3"/>
+                        <f:selectItem itemLabel="ALCOHOLICA" itemValue="1"/>
+                        <f:selectItem itemLabel="NO ALCOHOLICA" itemValue="0"/>
+                    </p:selectOneMenu>
+                   
+                    <p:outputLabel for="imgProd" value="Producto (img)" />
+                    <p:column>
+                        <p:fileUpload required="true" id="imgProd" value ="#{prob.file}" mode="simple"/>
+                        <p:commandButton value="Subir" actionListener="#{prob.upLoad()}" ajax="false"/>
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:commandButton id="guardar" value="Guardar Datos" icon="ui-icon-check" style="margin: 0"
+                                         action="#{prob.insertarProducto()}" update="@form">
+                        </p:commandButton>
+                        <p:commandButton id="cancelar" value="Cancelar" icon="ui-icon-circle-close" style="margin: 0"
+                                         action="NuevoProducto.xhtml?faces-redirect=true"
+                                         process="@this"></p:commandButton>
+                        <p:commandButton id="regresar" value="Regresar" icon="ui-icon-circle-close" style="margin: 0"
+                                         action="TablaProductos.xhtml?faces-redirect=true"
+                                         process="@this"></p:commandButton>
+                    </f:facet>
+                </p:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

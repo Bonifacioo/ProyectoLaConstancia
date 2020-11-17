@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../../PlantillaPrincipal/PlantillaPrincipal.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="formMarca" acceptcharset="ISO-8859-1">
+            <p:growl autoUpdate="true" showDetail="true"/>
+            <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+            <p:dataTable id="tablaMarca"
+                         value="#{mb.lstMarcas}"
+                         var="m"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport}
+                         {FirstPageLink}
+                         {PreviousPageLink}
+                         {PageLinks}
+                         {NextPageLink}
+                         {LastPageLink}
+                         {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15"
+                         widgetVar="wTablMarcas">
+                <f:facet name="header">
+                    <p:outputPanel>
+                        <p:outputLabel value="Busqueda Automatica" for="globalFilter"/>
+                        <p:inputText id="globalFilter" style="width: 500px"
+                                     onkeyup="PF('wTablMarcas').filter()" />
+                        <p:commandButton action="NuevaMarca.xhtml?faces-redirect=true"
+                                         icon="ui-icon-circle-plus" title="Agregar marca"/>
+                    </p:outputPanel>
+                </f:facet>
+                <p:column headerText="DESCRIPCION" filterBy="#{m.descripcion}" filterMatchMode="contains">
+                    <h:outputText value="#{m.descripcion}"/>  
+                </p:column>
+
+                <p:column headerText="ACCIONES" style="width: 20%">
+                    <p:panelGrid>
+                        <p:column headerText="">
+                            <p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgModificar').show();"
+                                             ajax="true" update="formModificar">
+                                <f:setPropertyActionListener
+                                    target="#{mb.marca }" value="#{m}"/>
+
+                            </p:commandButton>
+                        </p:column>
+                        <p:column>
+                            <p:commandButton icon="ui-icon-trash"
+                                             oncomplete="PF('confirmacion').show()">
+                                <f:setPropertyActionListener target="#{mb.marca}"
+                                                             value="#{m}"/>     
+                            </p:commandButton>
+                        </p:column>
+                    </p:panelGrid>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+          <p:confirmDialog message="¿REALMENTE DESEAS ELIMINAR EL REGISTRO?"
+                         header="Mensaje de confirmación"
+                         widgetVar="confirmacion">
+            <h:form>
+                <p:commandButton id="confirm" value="Si"
+                                 oncomplete="PF('confirmacion').hide()"
+                                 actionListener="#{mb.eliminarMarca()}"
+                                 action="TablaMarcas.xhtml"
+                                 update=":formMarca:tablaMarca"/>
+                <p:commandButton id="decline" value="No" onclick="PF('confirmacion').hide()" type="button"/>
+            </h:form>
+        </p:confirmDialog>
+        
+        <!-- MODIFICAR-->
+        <h:form id="formModificar">
+            <p:dialog id="dlg" widgetVar="dlgModificar" header="ACTUALIZAR DATO SELECCIONADO">
+                <p:panel header="Modificar">
+                    <p:panelGrid styleClass="sinBorde">
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="descripcion" value="DESCRIPCIÓN"/>
+                            </p:column>
+                            <p:column>
+                                <h:inputText id="descripcion" value="#{mb.marca.descripcion}"/>
+                            </p:column>
+                        </p:row>
+                       
+                         <p:row>
+                            <p:column>
+                                <p:commandButton id="guardar" value="Guardar Cambio" icon="ui-icon-check" style="margin: 0" 
+                                                 action="#{mb.modificarMarca()}" update="@form">
+                                </p:commandButton>
+                                <p:commandButton id="cancelar" value="Cancelar" icon="ui-icon-circle-close" style="margin: 0"
+                                                 action="TablaMarcas.xhtml?faces-redirect=true"
+                                                 process="@this">
+                                </p:commandButton>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </p:panel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

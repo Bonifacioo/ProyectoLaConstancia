@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h3 class="first">Datos de Productos</h3>
+
+    <ui:composition template="./../../PlantillaPrincipal/PlantillaPrincipal.xhtml">
+        <ui:define name="content">
+
+            <h:form id="frmProducto" acceptcharset="ISO-8859-1">
+                <p:dataTable id="tablaProductos" value="#{prob.lstProductos}"
+                             var="prod"
+                             rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport}
+                             {FirstPageLink} 
+                             {PreviousPageLink} 
+                             {PageLinks}
+                             {NextPageLink} 
+                             {LastPageLink}
+                             {RowsPerPageDropdown}"
+                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                             rowsPerPageTemplate="5,10,15"
+                             widgetVar="wTablaProductos">
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputLabel value="Busqueda" for="globalFilter"/>
+                            <p:inputText id="globalFilter" onkeyup="PF('wTablaProductos').filter()"
+                                         style="width: 700px" />
+                            <p:commandButton action="NuevoProducto.xhtml?faces-redirect=true" 
+                                             icon="ui-icon-circle-plus"/>
+                        </p:outputPanel>
+                    </f:facet>
+                    <p:column headerText="ID PRODUCTO" filterBy="#{prod.idProducto}"
+                              style="width: 60px; margin-left: -4px">
+                        <h:outputLabel value="#{prod.idProducto}"/>
+                    </p:column>
+                    <p:column headerText="MARCA DE PRODUCTOS" filterBy="#{prod.idMarca.descripcion}" 
+                              style="width: 60px; margin-left: -4px">
+                        <h:outputLabel value="#{prod.idMarca.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="PRESENTACIÓN DE PRODUCTOS" filterBy="#{prod.idPresentacion.descripcionPresentacion}" 
+                              style="width: 60px; margin-left: -4px">
+                        <h:outputLabel value="#{prod.idPresentacion.descripcionPresentacion}"/>
+                    </p:column>
+                    <p:column headerText="PRECIO UNITARIO" filterBy="#{prod.precio}" 
+                              style="width: 70px; margin-left: -4px">
+                        <h:outputText value="#{prod.precio}" />
+                    </p:column>
+                    <p:column headerText="ALCOHOLICA" filterBy="#{prod.alcoholica}" 
+                              style="width: 80px; margin-left: -4px">
+                        <h:outputText value="#{prod.alcoholica}"/>
+                    </p:column>
+
+                    <p:column headerText="IMAGEN" style="width: 5%">
+                        <p:panelGrid styleClass="ui-noborder">
+                            <p:column>
+                                <div align="center">
+                                    <p:commandButton icon="ui-icon-search" title="View" 
+                                                     oncomplete="PF('dlgBuscarImagen').show();"
+                                                     ajax="true" update=":formProductoImagen">
+                                        <f:setPropertyActionListener target="#{prob.producto}" 
+                                                                     value="#{prod}"/>
+                                    </p:commandButton>
+                                </div>
+                            </p:column>
+                        </p:panelGrid>
+                    </p:column>
+
+                    <p:column headerText="ACCIONES" style="width: 7%">
+                        <p:panelGrid styleClass="ui-noborder">
+                            <p:column headerText="">
+                                <div align="center">
+                                    <p:commandButton icon="ui-icon-pencil" 
+                                                     oncomplete="PF('dglModificar').show();"
+                                                     ajax="true" update=":formModificar">
+                                        <f:setPropertyActionListener target="#{prob.producto}" 
+                                                                     value="#{prod}"/>
+                                    </p:commandButton>
+                                </div>
+                            </p:column>
+
+                            <p:column headerText="">
+                                <p:commandButton icon="ui-icon-trash" 
+                                                 oncomplete="PF('confirmacion').show();"
+                                                 ajax="true" update=":frmProducto:tablaProductos">
+                                    <f:setPropertyActionListener target="#{prob.producto}"
+                                                                 value="#{prod}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:panelGrid>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+
+            <!--ELIMINAR-->
+            <p:confirmDialog message="¿REALMENTE DESEAS ELIMINAR EL REGISTRO?"
+                             header="Mensaje de confirmación"
+                             widgetVar="confirmacion">
+                <h:form>
+                    <p:commandButton id="confirm" value="Si"
+                                     oncomplete="PF('confirmacion').hide()"
+                                     actionListener="#{prob.eliminarProducto()}"
+                                     action="TablaProductos.xhtml"
+                                     update="frmProducto:tablaProductos"/>
+                    <p:commandButton id="decline" value="No" onclick="PF('confirmacion').hide()" type="button"/>
+                </h:form>
+            </p:confirmDialog>
+
+
+            <!-- MODIFICAR-->
+            <h:form id="formModificar">
+                <p:dialog id="dgl" widgetVar="dglModificar" header="Modificacion de datos de Productos">
+                    <p:panel header="Modificar">
+                        <p:panelGrid style="sinBorde">
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel for="id" value="ID PRODUCTO"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText id="id" value="#{prob.producto.idProducto}"/>
+                                </p:column>
+                            </p:row> 
+
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel for="marca" value="MARCA DE PRODUCTOS"/>
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="marca" value="#{prob.producto.idMarca}">
+                                        <f:selectItem itemLabel="#{prob.producto.idMarca.descripcion} " 
+                                                      itemValue="#{prob.producto.idMarca.idMarca}"/>
+                                        <f:selectItems value="#{prob.lstMarcas}" var="m" itemLabel="#{m.descripcion}" 
+                                                       itemValue="#{m.idMarca}"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel for="presentacion" value="PRESENTACIÓN DE PRODUCTOS"/>
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="presentacion" value="#{prob.producto.idPresentacion}">
+                                        <f:selectItem itemLabel="#{prob.producto.idPresentacion.descripcionPresentacion} " 
+                                                      itemValue="#{prob.producto.idPresentacion.idPresentacion}"/>
+                                        <f:selectItems value="#{prob.lstPresentaciones}" var="p" itemLabel="#{p.descripcionPresentacion}" 
+                                                       itemValue="#{p.idPresentacion}"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel for="precio" value="PRECIO"/>
+                                </p:column>
+                                <p:column>                                  
+                                    <p:spinner id="precio" value="#{prob.producto.precio}" 
+                                               prefix="$" min="0" max="100"
+                                               stepFactor="0.05" 
+                                               required="true"/>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <f:facet name="footer">
+                            <div align="center" style="font-weight: bold">
+                                <p:row>
+                                    <p:column>
+                                        <p:commandButton id="guardar" value="Guardar Cambio" icon="ui-icon-check" style="margin: 0" 
+                                                         action="#{prob.modificarProducto()  }" update="@form">
+                                        </p:commandButton>
+                                        <p:commandButton id="cancelar" value="Cancelar" icon="ui-icon-circle-close" style="margin: 0"
+                                                         action="TablaEmpleados.xhtml?faces-redirect=true"
+                                                         process="@this">
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:row>
+                            </div>
+                        </f:facet>
+                    </p:panel>
+                </p:dialog>
+            </h:form>
+
+            <h:form id="formProductoImagen">
+                <p:dialog id="dlg" widgetVar="dlgBuscarImagen" header="PRODUCTO" position="top">
+                    <p:panel>
+                        <p:panelGrid styleClass="sinBorde">
+                            <p:row>
+                                <p:column>
+                                    <img src="data:image/png;base64, #{prob.producto.fotoCodificada}"
+                                         id="img" class="avatar" height="70%"/> 
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:panel>
+                </p:dialog>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="/css/default.css"/>
+        <h:outputStylesheet name="/css/tableLayout.css"/>
+        <title>Sistema de Capacitaciones</title>
+    </h:head>
+    <h:body>
+        <div id="top">
+            <h:form>
+                <center>
+                    <h2> Sistema de Capacitaciones</h2>
+                </center>
+                <p:menubar>
+                    <p:menuitem value="Home" url="/faces/index.xhtml"> </p:menuitem>
+                    <p:submenu label="Empleados" icon="ui-icon-document">                  
+                        <p:menuitem value="Lista Empleados" url="/faces/Catalogos/Empleados/TablaEmpleados.xhtml" icon="fa fa-fw fa-book"/>
+                        <p:menuitem value="Agregar Empleado" url="/faces/Catalogos/Empleados/NuevoEmpleado.xhtml" icon="fa fa-fw fa-book"/>
+                    </p:submenu>    
+                    <p:submenu label="Categorias" icon="ui-icon-document">                  
+                        <p:menuitem value="Lista Categorias" url="/faces/Catalogos/Categorias/TablaCategorias.xhtml" icon="fa fa-fw fa-book"/>
+                        <p:menuitem value="Agregar Categoria" url="/faces/Catalogos/Categorias/NuevaCategoria.xhtml" icon="fa fa-fw fa-book"/>
+                    </p:submenu>
+                    <p:submenu label="Capacitaciones" icon="ui-icon-document">                  
+                        <p:menuitem value="Lista Capacitaciones" url="/faces/Catalogos/Capacitaciones/TablaCapacitaciones.xhtml" icon="fa fa-fw fa-book"/>
+                        <p:menuitem value="Agregar Capacitación" url="/faces/Catalogos/Capacitaciones/NuevaCapacitacion.xhtml" icon="fa fa-fw fa-book"/>
+                    </p:submenu>
+                     <p:submenu label="Capacitaciones empleados" icon="ui-icon-document">                  
+                        <p:menuitem value="Lista Empleados y sus capacitaciones" url="/faces/Catalogos/Capacitacion Empleado/TablaCapacitacionesEmpleados.xhtml" icon="fa fa-fw fa-book"/>
+                        <p:menuitem value="Agregar capacitacion a empleados" url="/faces/Catalogos/Capacitacion Empleado/NuevaCapacitacionEmpleado.xhtml" icon="fa fa-fw fa-book"/>
+                    </p:submenu>
+                </p:menubar>
+            </h:form>
+            <ui:insert name="top"></ui:insert>
+        </div>
+        <div id="content" class="center_content">
+            <ui:insert name="content"></ui:insert>
+        </div>
+        <div id="bottom">
+            <ui:insert name="bottom">
+                Sistema Capacitaciones, UES-PARACENTRAL,Todos los derechos reservados 2020
+            </ui:insert>
+        </div>
+    </h:body> 
+</html>

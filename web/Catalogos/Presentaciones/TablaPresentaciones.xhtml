@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../../PlantillaPrincipal/PlantillaPrincipal.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="formPresentacion" acceptcharset="ISO-8859-1">
+            <p:growl autoUpdate="true" showDetail="true"/>
+            <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+            <p:dataTable id="tablaPresentacion"
+                         value="#{pb.lstPresentaciones}"
+                         var="p"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport}
+                         {FirstPageLink}
+                         {PreviousPageLink}
+                         {PageLinks}
+                         {NextPageLink}
+                         {LastPageLink}
+                         {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15"
+                         widgetVar="wTablPresentaciones">
+                <f:facet name="header">
+                    <p:outputPanel>
+                        <p:outputLabel value="Busqueda Automatica" for="globalFilter"/>
+                        <p:inputText id="globalFilter" style="width: 500px"
+                                     onkeyup="PF('wTablPresentaciones').filter()" />
+                        <p:commandButton action="NuevaPresentacion.xhtml?faces-redirect=true"
+                                         icon="ui-icon-circle-plus" title="Agregar presentación"/>
+                    </p:outputPanel>
+                </f:facet>
+                <p:column headerText="PRESENTACIÓN" filterBy="#{p.presentacion}" filterMatchMode="contains">
+                    <h:outputText value="#{p.presentacion}"/>  
+                </p:column>
+                <p:column headerText="DESCRIPCIÓN" filterBy="#{p.descripcionPresentacion}" filterMatchMode="contains">
+                    <h:outputText value="#{p.descripcionPresentacion}"/>  
+                </p:column>
+
+                <p:column headerText="ACCIONES" style="width: 20%">
+                    <p:panelGrid>
+                        <p:column headerText="">
+                            <p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgModificar').show();"
+                                             ajax="true" update="formModificar">
+                                <f:setPropertyActionListener
+                                    target="#{pb.presentacion }" value="#{p}"/>
+
+                            </p:commandButton>
+                        </p:column>
+                        <p:column>
+                            <p:commandButton icon="ui-icon-trash"
+                                             oncomplete="PF('confirmacion').show()">
+                                <f:setPropertyActionListener target="#{pb.presentacion}"
+                                                             value="#{p}"/>     
+                            </p:commandButton>
+                        </p:column>
+                    </p:panelGrid>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+          <p:confirmDialog message="¿REALMENTE DESEAS ELIMINAR EL REGISTRO?"
+                         header="Mensaje de confirmación"
+                         widgetVar="confirmacion">
+            <h:form>
+                <p:commandButton id="confirm" value="Si"
+                                 oncomplete="PF('confirmacion').hide()"
+                                 actionListener="#{pb.eliminarPresentacion()}"
+                                 action="TablaPresentaciones.xhtml"
+                                 update=":formPresentacion:tablaPresentacion"/>
+                <p:commandButton id="decline" value="No" onclick="PF('confirmacion').hide()" type="button"/>
+            </h:form>
+        </p:confirmDialog>
+        
+        <!-- MODIFICAR-->
+        <h:form id="formModificar">
+            <p:dialog id="dlg" widgetVar="dlgModificar" header="ACTUALIZAR DATO SELECCIONADO">
+                <p:panel header="Modificar">
+                    <p:panelGrid styleClass="sinBorde">
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="presentacion" value="PRESENTACIÓN"/>
+                            </p:column>
+                            <p:column>
+                                <h:inputText id="presentacion" value="#{pb.presentacion.presentacion}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="descripcion" value="DESCRIPCIÓN"/>
+                            </p:column>
+                            <p:column>
+                                <h:inputText id="descripcion" value="#{pb.presentacion.descripcionPresentacion}"/>
+                            </p:column>
+                        </p:row>
+                       
+                         <p:row>
+                            <p:column>
+                                <p:commandButton id="guardar" value="Guardar Cambio" icon="ui-icon-check" style="margin: 0" 
+                                                 action="#{pb.modificarPresentacion()}" update="@form">
+                                </p:commandButton>
+                                <p:commandButton id="cancelar" value="Cancelar" icon="ui-icon-circle-close" style="margin: 0"
+                                                 action="TablaPresentaciones.xhtml?faces-redirect=true"
+                                                 process="@this">
+                                </p:commandButton>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </p:panel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

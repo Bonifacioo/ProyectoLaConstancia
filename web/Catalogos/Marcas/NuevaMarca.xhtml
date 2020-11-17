@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../../PlantillaPrincipal/PlantillaPrincipal.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="tsform">            
+        <p:panel header="INSERCION DE DATOS DE MARCA">
+            <p:panelGrid columns="2" style="width: 100%">
+                <h:outputLabel for="descripcion" value="DESCRIPCIÓN"/>
+                <p:inputText id="descripcion" value="#{mb.marca.descripcion}" required="true" placeholder="descripcion" />
+                
+                <f:facet name="footer">
+                     <p:commandButton id="guardar" value="Guardar Datos" icon="ui-icon-check" style="margin: 0"
+                                      action="#{mb.insertarMarca() }" update="@form">
+                     </p:commandButton>
+                     <p:commandButton id="cancelar" value="Cancelar" icon="ui-icon-circle-close" style="margin: 0"
+                                      action="NuevaMarca.xhtml?faces-redirect=true"
+                                      process="@this"></p:commandButton>
+                     <p:commandButton id="regresar" value="Registrar" icon="ui-icon-circle-close" style="margin: 0"
+                                      action="TablaMarcas.xhtml?faces-redirect=true"
+                                      process="@this"></p:commandButton>
+                </f:facet>
+            </p:panelGrid>
+        </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
