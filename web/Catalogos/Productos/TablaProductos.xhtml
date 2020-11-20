@@ -50,9 +50,9 @@
                               style="width: 70px; margin-left: -4px">
                         <h:outputText value="#{prod.precio}" />
                     </p:column>
-                    <p:column headerText="ALCOHOLICA" filterBy="#{prod.alcoholica}" 
+                    <p:column headerText="ALCOHOLICA" filterBy="#{prob.extraerTexto(prod)}" 
                               style="width: 80px; margin-left: -4px">
-                        <h:outputText value="#{prod.alcoholica}"/>
+                        <h:outputText value="#{prob.extraerTexto(prod)}"/>
                     </p:column>
 
                     <p:column headerText="IMAGEN" style="width: 5%">
@@ -124,33 +124,29 @@
                                     <h:outputText id="id" value="#{prob.producto.idProducto}"/>
                                 </p:column>
                             </p:row> 
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel for="marca" value="MARCA DE PRODUCTO"/>
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="marca"  style="width: 160px" value="#{prob.marca.idMarca}">
+                                        <f:selectItem itemLabel="#{prob.producto.idMarca.descripcion}" itemValue="#{prob.producto.idMarca.idMarca}"/>
+                                        <f:selectItems value="#{prob.lstMarcas}" var="m" itemLabel="#{m.descripcion}" itemValue="#{m.idMarca}"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel for="presentacion" value="PRESENTACIÓN DE PRODUCTO"/>
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="presentacion"  style="width: 160px" value="#{prob.presentacion.idPresentacion}">
+                                        <f:selectItem itemLabel="#{prob.producto.idPresentacion.descripcionPresentacion}" itemValue="#{prob.producto.idPresentacion.idPresentacion}"/>
+                                        <f:selectItems value="#{prob.lstPresentaciones}" var="pre" itemLabel="#{pre.descripcionPresentacion}" itemValue="#{pre.idPresentacion}"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
 
-                            <p:row>
-                                <p:column>
-                                    <p:outputLabel for="marca" value="MARCA DE PRODUCTOS"/>
-                                </p:column>
-                                <p:column>
-                                    <p:selectOneMenu id="marca" value="#{prob.producto.idMarca}">
-                                        <f:selectItem itemLabel="#{prob.producto.idMarca.descripcion} " 
-                                                      itemValue="#{prob.producto.idMarca.idMarca}"/>
-                                        <f:selectItems value="#{prob.lstMarcas}" var="m" itemLabel="#{m.descripcion}" 
-                                                       itemValue="#{m.idMarca}"/>
-                                    </p:selectOneMenu>
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column>
-                                    <p:outputLabel for="presentacion" value="PRESENTACIÓN DE PRODUCTOS"/>
-                                </p:column>
-                                <p:column>
-                                    <p:selectOneMenu id="presentacion" value="#{prob.producto.idPresentacion}">
-                                        <f:selectItem itemLabel="#{prob.producto.idPresentacion.descripcionPresentacion} " 
-                                                      itemValue="#{prob.producto.idPresentacion.idPresentacion}"/>
-                                        <f:selectItems value="#{prob.lstPresentaciones}" var="p" itemLabel="#{p.descripcionPresentacion}" 
-                                                       itemValue="#{p.idPresentacion}"/>
-                                    </p:selectOneMenu>
-                                </p:column>
-                            </p:row>
                             <p:row>
                                 <p:column>
                                     <p:outputLabel for="precio" value="PRECIO"/>
@@ -162,20 +158,39 @@
                                                required="true"/>
                                 </p:column>
                             </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel for="alcoholica" value="ALCOHOLICA"/>
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu id="alcoholica" value="#{prob.alcohol}">
+                                        <f:selectItem itemLabel="#{prob.extraerTexto()} " 
+                                                      itemValue="#{prob.extraerBoolean()}"/>
+                                        <f:selectItem itemLabel="ALCOHOLICA" itemValue="1"/>
+                                        <f:selectItem itemLabel="NO ALCOHOLICA" itemValue="2"/>
+
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
                         </p:panelGrid>
                         <f:facet name="footer">
                             <div align="center" style="font-weight: bold">
-                                <p:row>
-                                    <p:column>
-                                        <p:commandButton id="guardar" value="Guardar Cambio" icon="ui-icon-check" style="margin: 0" 
-                                                         action="#{prob.modificarProducto()  }" update="@form">
-                                        </p:commandButton>
-                                        <p:commandButton id="cancelar" value="Cancelar" icon="ui-icon-circle-close" style="margin: 0"
-                                                         action="TablaEmpleados.xhtml?faces-redirect=true"
-                                                         process="@this">
-                                        </p:commandButton>
-                                    </p:column>
-                                </p:row>
+                                <p:column>
+                                    <p:commandButton id="guardar" value="Guardar" icon="ui-icon-check" style="margin: 0" 
+                                                     actionListener="#{prob.modificarProducto()}" 
+                                                     update=":frmProducto:tablaProductos"
+                                                     oncomplete="PF('dglModificar').hide()"
+                                                     action="TablaProductos.xhtml">
+                                    </p:commandButton>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton id="cancelar"
+                                                     value="CANCELAR"
+                                                     icon="ui-icon-circle-close" style="margin-left: 10px" 
+                                                     action="TablaProductos.xhtml?faces-redirect=true"
+                                                     process="@this">                            
+                                    </p:commandButton>
+                                </p:column>
                             </div>
                         </f:facet>
                     </p:panel>

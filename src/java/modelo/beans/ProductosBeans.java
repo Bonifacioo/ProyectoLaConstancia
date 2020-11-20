@@ -29,9 +29,10 @@ import org.primefaces.model.UploadedFile;
  *
  * @author BONIFACIO
  */
-@ManagedBean (name="prob")
+@ManagedBean(name = "prob")
 @ViewScoped
-public class ProductosBeans  implements Serializable{
+public class ProductosBeans implements Serializable {
+
     // Agregado para subir la imagen
     private UploadedFile file;
     @Inject//para cada paquete que ocupemos, nos sirve para poder insertar los datos
@@ -46,9 +47,10 @@ public class ProductosBeans  implements Serializable{
     private List<Marcas> lstMarcas;
     private List<Presentacion> lstPresentaciones;
     private List<Producto> lstProductos;
-    
+    private int alcohol;
+
     @PostConstruct
-    private void init(){
+    private void init() {
         presentacion = new Presentacion();
         marca = new Marcas();
         producto = new Producto();
@@ -56,29 +58,38 @@ public class ProductosBeans  implements Serializable{
         obtenerListaMarcas();
         obtenerListaPresentaciones();
     }
-    
-    private List<Marcas> obtenerListaMarcas(){
+
+    private List<Marcas> obtenerListaMarcas() {
         return lstMarcas = marcasF.findAll();//obteniendo la lista de registros 
     }
-    private List<Presentacion> obtenerListaPresentaciones(){
+
+    private List<Presentacion> obtenerListaPresentaciones() {
         return lstPresentaciones = presentacionF.findAll();//obteniendo la lista de registros 
     }
-    private List<Producto> obtenerListaProductos(){
+
+    private List<Producto> obtenerListaProductos() {
         return lstProductos = productoF.findAll();//obteniendo la lista de registros 
     }
-    
-    public String insertarProducto(){
+
+    public String insertarProducto() {
         List<Producto> prodcts = obtenerListaProductos();
         Producto prod = null;
-        if(prodcts.size()>0) prod = prodcts.get(prodcts.size()-1);
-        int id=0;
-        if(prod != null){
-            id = prod.getIdProducto()+1;
+        if (prodcts.size() > 0) {
+            prod = prodcts.get(prodcts.size() - 1);
+        }
+        int id = 0;
+        if (alcohol == 1) {
+            producto.setAlcoholica(true);
+        } else {
+            producto.setAlcoholica(false);
+        }
+        if (prod != null) {
+            id = prod.getIdProducto() + 1;
             producto.setIdMarca(marca);
             producto.setIdPresentacion(presentacion);
             producto.setIdProducto(id);
             productoF.create(producto);
-        }else{
+        } else {
             producto.setIdProducto(id);
             producto.setIdMarca(marca);
             producto.setIdPresentacion(presentacion);
@@ -88,20 +99,27 @@ public class ProductosBeans  implements Serializable{
         return "TablaProductos.xhtml?faces-redirect=true";
     }
     
-    public String modificarProducto(){
-        producto.setIdPresentacion(presentacion);
-        producto.setIdMarca(marca);
-        productoF.edit(producto);
+    public String modificarProducto() { 
+        if (alcohol == 1) {
+            producto.setAlcoholica(true);
+        } else {
+            producto.setAlcoholica(false);
+        }
+        producto.setIdPresentacion(presentacion); 
+        this.producto.setIdMarca(marca);
+System.out.println("LLEGO ANTES DE MODIFICAR EL PRODUCTO");
+        this.productoF.edit(this.producto);
+        System.out.println("LLEGO DESPUES DE MODIFICAR EL PRODUCTO EXITO");
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Información", "Producto Modificado"));
         return "TablaProductos.xhtml?faces-redirect=true";
     }
-    
-    public String eliminarProducto(){
+
+    public String eliminarProducto() {
         productoF.remove(producto);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Información", "Producto Eliminado"));
         return "TablaProductos.xhtml?faces-redirect=true";
     }
-    
+
     // Mostrar imagen
     public void view() throws IOException {
         try {
@@ -135,8 +153,39 @@ public class ProductosBeans  implements Serializable{
             }
         }
     }
-    
-     // Métodos set y get de File (subir imagen)
+
+    public int extraerBoolean() {
+        if (producto.getAlcoholica() != null) {
+            if (producto.getAlcoholica()) {
+                return 1;
+            } else {
+                return 2;
+            }
+        }
+        return 0;
+    }
+
+    public String extraerTexto() {
+        if (producto.getAlcoholica() != null) {
+            if (producto.getAlcoholica()) {
+                return "ALCOHOLICA";
+            } else {
+                return "NO ALCOHOLICA";
+            }
+        }
+        return "";
+    }
+    public String extraerTexto(Producto p) {
+        if (p.getAlcoholica() != null) {
+            if (p.getAlcoholica()) {
+                return "ALCOHOLICA";
+            } else {
+                return "NO ALCOHOLICA";
+            }
+        }
+        return "";
+    }
+    // Métodos set y get de File (subir imagen)
     public UploadedFile getFile() {
         return file;
     }
@@ -216,6 +265,20 @@ public class ProductosBeans  implements Serializable{
     public void setLstProductos(List<Producto> lstProducto) {
         this.lstProductos = lstProducto;
     }
+
+    public int getAlcohol() {
+        return alcohol;
+    }
+
+    public void setAlcohol(int alcohol) {
+        this.alcohol = alcohol;
+    }
     
-    
+    public void setMarcaP(Marcas mar){
+        producto.setIdMarca(mar);
+    }
+    public void setPresentP(Presentacion p){
+        producto.setIdPresentacion(p);
+    }
+
 }

@@ -25,10 +25,10 @@
                                prefix="$" min="0" max="100"  stepFactor="0.05"  required="true"/>
                     
                     <h:outputLabel for="alcoholica" value="ALCOHOLICA"/>
-                    <p:selectOneMenu id="alcoholica"  style="width: 160px" value="#{prob.producto.alcoholica}">
-                        <f:selectItem itemLabel="Seleccione si es alcoholica o no" itemValue="3"/>
+                    <p:selectOneMenu id="alcoholica"  style="width: 160px" value="#{prob.alcohol}">
+                        <f:selectItem itemLabel="Seleccione si es alcoholica o no" itemValue="0"/>
                         <f:selectItem itemLabel="ALCOHOLICA" itemValue="1"/>
-                        <f:selectItem itemLabel="NO ALCOHOLICA" itemValue="0"/>
+                        <f:selectItem itemLabel="NO ALCOHOLICA" itemValue="2"/>
                     </p:selectOneMenu>
                    
                     <p:outputLabel for="imgProd" value="Producto (img)" />
